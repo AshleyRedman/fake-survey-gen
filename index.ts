@@ -1,7 +1,7 @@
+import fs from 'fs';
 import { generateMock } from '@anatine/zod-mock';
-import {schema} from './schema';
+import { SurveyJsonSchema } from './schema';
 
-const mock = generateMock(schema);
+const mock = generateMock(SurveyJsonSchema);
 
-
-console.debug({mock});
+fs.writeFile('example.json', JSON.stringify(mock), {}, () => {});

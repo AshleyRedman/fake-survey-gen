@@ -7,3 +7,4 @@ With so many tests needing to hand craft possible out dated shapes of data, it w
 - clone
 - install
 - run `pnpm ts-node index.ts` (or npm, yarn etc, basically run the index file)
+- Look at `example.json`, a generated survey is created and written to that file.
