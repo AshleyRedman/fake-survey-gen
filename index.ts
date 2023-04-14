@@ -1,11 +1,24 @@
 import fs from 'fs';
-import { generateMock } from '@anatine/zod-mock';
-import { SurveyJsonSchema } from './schema';
 
-const mock = generateMock(SurveyJsonSchema, {
-    stringMap: {
-        title: () => `This is the name of the survey, hence testable`
-    }
+import { createSurveyMock } from './playground';
+
+const mock = createSurveyMock({
+    title: 'Mock survey title',
+    description: 'Mock survey description',
+    pages: [
+        {
+            id: 1,
+            description: 'desc',
+            isEditing: false,
+            isLocked: false,
+            questions: [],
+            showDescription: false,
+            showTitle: false,
+            title: 'Page one',
+            preventNewQuestions: false,
+            visibleIf: undefined
+        }
+    ]
 });
 
-fs.writeFile('example.json', JSON.stringify(mock), {}, () => {});
+fs.writeFile('mock.json', JSON.stringify(mock), {}, () => {});
