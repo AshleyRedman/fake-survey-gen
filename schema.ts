@@ -26,7 +26,7 @@ const PrePopulationSchema = z.object({
 
 const QuestionValidationSchema = z.object({});
 
-const questionTypes = {
+export const questionTypes = {
     SINGLE_LINE: 'SINGLE_LINE',
     MULTI_LINE: 'MULTI_LINE',
     DROPDOWN: 'DROPDOWN',
@@ -37,8 +37,6 @@ const questionTypes = {
     TIME: 'TIME',
     NOTE: 'NOTE'
 } as const;
-
-type QuestionType = typeof questionTypes[keyof typeof questionTypes];
 
 const AnswerOptionSchema = z
     .object({
@@ -59,9 +57,7 @@ const BaseQuestionSchema = z
     })
     .strict();
 
-type BaseQuestion = z.infer<typeof BaseQuestionSchema>;
-
-const QuestionNoteSchema = z
+export const QuestionNoteSchema = z
     .object({
         type: z.literal(questionTypes.NOTE),
         content: z.string()
@@ -69,9 +65,7 @@ const QuestionNoteSchema = z
     .strict()
     .merge(BaseQuestionSchema);
 
-type QuestionNote = z.infer<typeof QuestionNoteSchema>;
-
-const QuestionSingleLineSchema = z
+export const QuestionSingleLineSchema = z
     .object({
         type: z.literal(questionTypes.SINGLE_LINE),
         questionNumber: z.number().min(1),
@@ -84,9 +78,7 @@ const QuestionSingleLineSchema = z
     .merge(PrePopulationSchema)
     .merge(BaseQuestionSchema);
 
-type QuestionSingleLine = z.infer<typeof QuestionSingleLineSchema>;
-
-const QuestionMultilineSchema = z
+export const QuestionMultilineSchema = z
     .object({
         type: z.literal(questionTypes.MULTI_LINE),
         questionNumber: z.number().min(1),
@@ -100,9 +92,7 @@ const QuestionMultilineSchema = z
     .merge(PrePopulationSchema)
     .merge(BaseQuestionSchema);
 
-type QuestionMultiline = z.infer<typeof QuestionMultilineSchema>;
-
-const QuestionDropdownSchema = z
+export const QuestionDropdownSchema = z
     .object({
         type: z.literal(questionTypes.DROPDOWN),
         questionNumber: z.number().min(1),
@@ -115,9 +105,7 @@ const QuestionDropdownSchema = z
     .merge(PrePopulationSchema)
     .merge(BaseQuestionSchema);
 
-type QuestionDropdown = z.infer<typeof QuestionDropdownSchema>;
-
-const QuestionChoiceSchema = z
+export const QuestionChoiceSchema = z
     .object({
         type: z.literal(questionTypes.CHOICE),
         questionNumber: z.number().min(1),
@@ -132,9 +120,7 @@ const QuestionChoiceSchema = z
     .merge(PrePopulationSchema)
     .merge(BaseQuestionSchema);
 
-type QuestionChoice = z.infer<typeof QuestionChoiceSchema>;
-
-const QuestionGridSchema = z
+export const QuestionGridSchema = z
     .object({
         type: z.literal(questionTypes.GRID),
         questionNumber: z.number().min(1),
@@ -149,9 +135,7 @@ const QuestionGridSchema = z
     .strict()
     .merge(BaseQuestionSchema);
 
-type QuestionGrid = z.infer<typeof QuestionGridSchema>;
-
-const QuestionDateTimeSchema = z
+export const QuestionDateTimeSchema = z
     .object({
         type: z.literal(questionTypes.DATE_TIME),
         questionNumber: z.number().min(1),
@@ -163,9 +147,7 @@ const QuestionDateTimeSchema = z
     .strict()
     .merge(BaseQuestionSchema);
 
-type QuestionDateTime = z.infer<typeof QuestionDateTimeSchema>;
-
-const QuestionDateSchema = z
+export const QuestionDateSchema = z
     .object({
         type: z.literal(questionTypes.DATE),
         questionNumber: z.number().min(1),
@@ -177,9 +159,7 @@ const QuestionDateSchema = z
     .strict()
     .merge(BaseQuestionSchema);
 
-type QuestionDate = z.infer<typeof QuestionDateSchema>;
-
-const QuestionTimeSchema = z
+export const QuestionTimeSchema = z
     .object({
         type: z.literal(questionTypes.TIME),
         questionNumber: z.number().min(1),
@@ -196,7 +176,7 @@ const BasePageSchema = z.object({
     isEditing: z.boolean()
 });
 
-const PageSchema = z
+export const PageSchema = z
     .object({
         id: z.number().min(1),
         title: z.string().max(1024),
@@ -222,9 +202,9 @@ const PageSchema = z
     .strict()
     .merge(BasePageSchema);
 
-const FinalPageSchema = z.object({ content: z.string() }).merge(BasePageSchema).strict();
+export const FinalPageSchema = z.object({ content: z.string() }).merge(BasePageSchema).strict();
 
-const SurveyLanguageTranslationsSchema = z.object({
+export const SurveyLanguageTranslationsSchema = z.object({
     selectOption: z.string().min(1).max(255),
     next: z.string().min(1).max(255),
     previous: z.string().min(1).max(255),
@@ -241,9 +221,7 @@ const SurveyLanguageTranslationsSchema = z.object({
     download: z.string().min(1).max(255)
 });
 
-type SurveyLanguageTranslations = z.infer<typeof SurveyLanguageTranslationsSchema>;
-
-const SurveyThemeSchema = z
+export const SurveyThemeSchema = z
     .object({
         name: z.enum(['Dark red', 'Red', 'Pink', 'Purple', 'Dark purple', 'Dark blue', 'Blue', 'Dark green', 'Green']),
         main: z.enum([
@@ -297,7 +275,7 @@ const SurveyThemeSchema = z
     })
     .strict();
 
-const SurveyLogoSchema = z
+export const SurveyLogoSchema = z
     .object({
         url: z.string().min(1).max(2048),
         alt: z.string().max(1024),

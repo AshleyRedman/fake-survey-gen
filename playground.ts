@@ -1,24 +1,30 @@
-import { z } from 'zod';
 import { generateMock } from '@anatine/zod-mock';
-import { SurveyJsonSchema } from './schema';
+import {
+    PageSchema,
+    QuestionChoiceSchema,
+    QuestionDateSchema,
+    QuestionDateTimeSchema,
+    QuestionDropdownSchema,
+    QuestionGridSchema,
+    QuestionMultilineSchema,
+    QuestionNoteSchema,
+    QuestionSingleLineSchema,
+    QuestionTimeSchema,
+    SurveyJsonSchema
+} from './schema';
+import type { Questions, SurveyJson, PageJson, Type } from './types';
+import { ZodSchema } from 'zod';
 
-export type SurveyJson = z.infer<typeof SurveyJsonSchema>;
-
+/**
+ * @param args Only supports obj values of strings, e.g `title`, `description`, but not `theme`
+ */
 export function createSurveyMock(args: Partial<SurveyJson>): SurveyJson {
-    const build = {};
+    const build: Record<string, () => string> = {};
 
-    Object.entries(args).forEach((entry) => {
-        const key = entry[0];
-        const value = entry[1];
-
-        // @todo Current the mock only acceps string overrides, deeper objects are unsupported
-        // This might be easier to pass in as a seed
+    Object.entries(args).forEach(([key, value]) => {
         if (typeof value === 'string') {
-            // @ts-expect-error todo build up a better objet to seed
             build[key] = () => value;
         }
-
-        return entry;
     });
 
     const mock = generateMock(SurveyJsonSchema, {
@@ -27,4 +33,49 @@ export function createSurveyMock(args: Partial<SurveyJson>): SurveyJson {
     });
 
     return mock;
+}
+
+export function createPageMock(args: Partial<PageJson>): PageJson {
+    const build = {};
+    const mock = generateMock(PageSchema, {
+        stringMap: build,
+        throwOnUnknownType: true
+    });
+
+    return mock;
+}
+
+export function createQuestionMock(args: Partial<Questions> & { type: Type }) {
+    let schema: ZodSchema | undefined = undefined;
+
+    if (args.type === 'NOTE') {
+        schema = QuestionNoteSchema;
+    } else if (args.type === 'SINGLE_LINE') {
+        schema = QuestionSingleLineSchema;
+    } else if (args.type === 'MULTI_LINE') {
+        schema = QuestionMultilineSchema;
+    } else if (args.type === 'CHOICE') {
+        schema = QuestionChoiceSchema;
+    } else if (args.type === 'DROPDOWN') {
+        schema = QuestionDropdownSchema;
+    } else if (args.type === 'GRID') {
+        schema = QuestionGridSchema;
+    } else if (args.type === 'DATE_TIME') {
+        schema = QuestionDateTimeSchema;
+    } else if (args.type === 'DATE') {
+        schema = QuestionDateSchema;
+    } else if (args.type === 'TIME') {
+        schema = QuestionTimeSchema;
+    }
+
+    if (!schema) {
+        throw new Error('Invalid arguments provided.');
+    }
+
+    const build = {};
+
+    const mock = generateMock(schema, {
+        stringMap: build,
+        throwOnUnknownType: true
+    });
 }
